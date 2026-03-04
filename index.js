@@ -26,6 +26,19 @@ const nestingNodes = [
     'SwitchStatement'
 ];
 
+const halsteadNodes = [
+    'BinaryExpression',
+    'AssignmentExpression',
+    'UnaryExpression',
+    'IfStatement',
+    'LogicalExpression',
+    'ForStatement',
+    'WhileStatement',
+    'DoWhileStatement',
+    'ReturnStatement',
+    'SwitchStatement'
+];
+
 
 //To detect functional part of the code
 const functionalNodes = [
@@ -114,22 +127,92 @@ let maxDepth = 0;
 let currDepth = 0;
 
 // 5. Output
-function showOutput(code){
+function calCyclomaticComplexity(code){
     const ast = acorn.parse(code, { ecmaVersion: "latest", locations: true });
     walk(ast);
     const baseScore = 1;
     console.log(`Base Score: ${baseScore}`);
     console.log(`Statements found to increase cyclometric complexity: ${Counter}`);
     console.log(`Total Score: ${baseScore + Counter}`);
+    mainCounter = Counter;
     Counter = 0;   
+}
+
+
+
+function walkHal(node){
+    if(!node) return;
+
+    if(node.type == 'Identifier'){
+        totalOperands++;
+        uniqueOperands.add(node.name); 
+    }
+    else if(node.type == 'Literal'){
+        totalOperands++;
+        uniqueOperands.add(node.value);
+    }
+    if(halsteadNodes.includes(node.type)){
+        totalOperators++;
+        uniqueOperators.add(node.operator || node.type)
+    }
+
+    for(let key in node){
+        if(node[key] && typeof node[key]=== 'object'){
+            if(Array.isArray(node[key])){
+                node[key].forEach((ele)=>(walkHal(ele)))
+            }else{
+                walkHal(node[key]);
+            }
+        }
+    }
+}
+
+let totalOperators = 0; // N1
+let totalOperands = 0;  // N2
+const uniqueOperators = new Set(); // n1
+const uniqueOperands = new Set();  // n2
+
+function calHalstead(code){
+    const ast = acorn.parse(code, { ecmaVersion: "latest", locations: true });
+    // console.log(ast)
+    walkHal(ast);
+    console.log(`Total  Operators: ${totalOperators}`);
+    console.log(`Total  Operands: ${totalOperands}`);
+    let x = uniqueOperators.size;
+    let y = uniqueOperands.size;
+    console.log(x,' ',y)
+    let V = (totalOperators + totalOperands)*Math.log2(x+y);
+    console.log(V);
+    Volume = V;
+    totalOperators = 0;
+    totalOperands = 0;
+    uniqueOperators.clear()
+    uniqueOperands.clear();
 }
 
 function showDetails(code){
     const ast = acorn.parse(code, { ecmaVersion: 2020, locations: true });
     console.log(ast);
-    console.log(ast);
+    console.log(ast.loc.end.line);              //CALCULATES THE TOTAL LINES OF CODE OF FILE
 }
 
+
+function summary(code){
+    const ast = acorn.parse(code, { ecmaVersion: "latest", locations: true });
+    let totalloc = ast.loc.end.line;  
+
+    rawMI = 171 - 5.2 * Math.log(Volume || 1) - 0.23 * mainCounter - 16.2 * Math.log(totalloc || 1);
+
+    let normalizedMI = Math.max(0, Math.min(100, (rawMI * 100) / 171));
+
+    console.log(`--- 🏆 RepoAudit Final Report ---`);
+    console.log(`Total Volume (V): ${Volume.toFixed(2)}`);
+    console.log(`Maintainability Score: ${normalizedMI.toFixed(2)}%`);
+}
+let Volume;
+let mainCounter;
 const code = fs.readFileSync("target.js", "utf-8");           //RETURNS CODE AS STRING
-showOutput(code)
+calCyclomaticComplexity(code)
 // showDetails(code);
+calHalstead(code);
+summary()

@@ -16,3 +16,15 @@ https://arxiv.org/search/?query=Decoding+Code+Quality%3A+A+Software+Metric+Analy
 //         return y != 5? 0: -1;
 //     }
 // }
+
+function example(a,b){
+    if(a){
+        for(let i=0;i<10;i++){
+            if(b && a){
+                while(i < 5){
+                    console.log(i);
+                }
+            }
+        }
+    }
+}
