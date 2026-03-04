@@ -1,0 +1,18 @@
+https://arxiv.org/abs/2408.10754
+https://arxiv.org/abs/2502.07399
+
+https://arxiv.org/search/?query=Decoding+Code+Quality%3A+A+Software+Metric+Analysis+of+Open-Source+JavaScript+Projects&searchtype=all&abstracts=show&order=-announced_date_first&size=50
+
+
+
+// function test2(y) { 
+//     if(y > 0){ 
+//         return 1;
+//     }else {
+//         while(y < 5){
+//             console.log(10);
+//             y++;
+//         }    
+//         return y != 5? 0: -1;
+//     }
+// }
