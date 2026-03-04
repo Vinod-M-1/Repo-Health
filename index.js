@@ -11,9 +11,23 @@ const complexityNodes = [
     'SwitchCase',
     'CatchClause',
     'ConditionalExpression',
-    'LogicalExpression'
+    'ForInStatement',
+    'ForOfStatement'
 ];
 
+const nestingNodes = [
+    'IfStatement',
+    'ForStatement',
+    'WhileStatement',
+    'DoWhileStatement',
+    'CatchClause',
+    'ForInStatement',
+    'ForOfStatement',
+    'SwitchStatement'
+];
+
+
+//To detect functional part of the code
 const functionalNodes = [
     'FunctionDeclaration',
     'FunctionExpression',
@@ -23,12 +37,23 @@ const functionalNodes = [
 function analysefun(node){
     if (!node) return;
     
-    if (complexityNodes.includes(node.type)) {
-        newCounter++;
-    }
     if(functionalNodes.includes(node.type)) {
         return;
     }
+    //logic for complexity
+    if(complexityNodes.includes(node.type)){
+        newCounter++;
+    }
+    
+    if(node.type == 'LogicalExpression' && (node.operator == '&&' || node.operator == '||')){
+        newCounter++;
+    }
+
+    if (nestingNodes.includes(node.type)) {
+        currDepth++;
+        if(maxDepth < currDepth) maxDepth = currDepth;
+    }
+    
     for (let key in node) {
         if (node[key] && typeof node[key] === 'object') {
             // If it's an array (like a block of code), walk each item
@@ -40,7 +65,7 @@ function analysefun(node){
             }
         }
     }
-
+    if (nestingNodes.includes(node.type)) currDepth--;
 }
 
 function walk(node) {
@@ -51,15 +76,21 @@ function walk(node) {
         Counter++;
     }
     if(node.type == 'LogicalExpression' && (node.operator == '&&' || node.operator == '||')){
-        counter++;
+        Counter++;
     }
     if(functionalNodes.includes(node.type)) {
-        newCounter = 0;
         analysefun(node.body);
-        if(node.id) console.log(node.id.name,1+newCounter);
-        else console.log('Anonymous function: ',1+newCounter );
+        
+        const loc = node.loc.end.line - node.loc.start.line + 1;
+        
+        if(node.id) console.log(node.id.name," ",1+newCounter," ",loc, " ", maxDepth);
+        else console.log('Anonymous function: '," ",1+newCounter, ' ', loc, " ", maxDepth);
         Counter += newCounter + 1;
+        
         newCounter = 0;
+        maxDepth = 0;
+        currDepth = 0;
+        
         return;
     }
     // Recursively check all children of this node
@@ -79,10 +110,12 @@ function walk(node) {
 
 let Counter = 0;
 let newCounter = 0;
+let maxDepth = 0;
+let currDepth = 0;
 
 // 5. Output
 function showOutput(code){
-    const ast = acorn.parse(code, { ecmaVersion: 2020 });
+    const ast = acorn.parse(code, { ecmaVersion: "latest", locations: true });
     walk(ast);
     const baseScore = 1;
     console.log(`Base Score: ${baseScore}`);
@@ -91,15 +124,11 @@ function showOutput(code){
     Counter = 0;   
 }
 
-// function showDetails(code){
-//     const ast = acorn.parse(code, { ecmaVersion: 2020 });
-//     // console.log(ast);
-//     let bd = ast.body[0].body.body[0];
-//     console.log(bd);
-//     // console.log(ast);
-//     // let bd = ast.body[0];
-//     // console.log(bd)
-// }
+function showDetails(code){
+    const ast = acorn.parse(code, { ecmaVersion: 2020, locations: true });
+    console.log(ast);
+    console.log(ast);
+}
 
 const code = fs.readFileSync("target.js", "utf-8");           //RETURNS CODE AS STRING
 showOutput(code)
