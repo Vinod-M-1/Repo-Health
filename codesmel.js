@@ -47,7 +47,6 @@ function getSmells(ast, analysis) {
             smells.push({
                 type: "Long Function",
                 name: fn.name,
-                line: fn.loc.startline,
                 description: `Function is too long (${fn.loc} lines). Break it into smaller parts.`,
                 severity: "Medium"
             });

@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "acorn": "^8.16.0",
+    "child_process": "^1.0.2",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
     "fs": "^0.0.1-security"
   }
 }
