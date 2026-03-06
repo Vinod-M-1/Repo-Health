@@ -23,7 +23,7 @@ function readfiles(repoReport,filepaths){
     }
     return repoReport;
 }
-function CalFullRepoAnalysis(repo){
+function CalFullRepoAnalysis(repo, targetPath){
     let totalLOC = 0;
     let totalSmells = 0;
     let sumMI = 0;
@@ -63,10 +63,20 @@ function CalFullRepoAnalysis(repo){
 } 
 
 async function runFullRepoAnalysis(repoUrl) {    
-    const filepaths = crawler.getProjectFiles(repoUrl, './temp_repo');
+    const uniqueFolderName = `./temp_repo_${Date.now()}`;
+
+    const filepaths = crawler.getProjectFiles(repoUrl, uniqueFolderName);
     let repoReport = [];
     repoReport = readfiles(repoReport,filepaths);
+
     repoanaly = CalFullRepoAnalysis(repoReport);
+    
+    try {
+        fs.rmSync(uniqueFolderName, { recursive: true, force: true });
+        console.log(`Cleaned up ${uniqueFolderName}`);
+    } catch (err) {
+        console.error("Cleanup error:", err);
+    }
     return {repoReport, repoanaly};
 }
 

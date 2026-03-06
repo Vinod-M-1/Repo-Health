@@ -2,13 +2,12 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-function cloneRepo(repo_url){
-    const folder = './temp_repo'
-    if (fs.existsSync(folder)) {
-        fs.rmSync(folder, { recursive: true, force: true });
+function cloneRepo(repo_url, targetFolder){
+    if (fs.existsSync(targetFolder)) {
+        fs.rmSync(targetFolder, { recursive: true, force: true });
     }
-    console.log("Cloning started..");
-    execSync(`git clone ${repo_url} ${folder}`);
+    console.log(`Cloning started into ${targetFolder}..`);
+    execSync(`git clone ${repo_url} ${targetFolder}`);
     console.log('Cloning finished..');
 }
 
@@ -31,10 +30,10 @@ function findjs(arr, currpath){
     return arr;
 }
 
-function getProjectFiles(url, StartPath){
-    if(url != '') cloneRepo(url);
+function getProjectFiles(url, targetFolder){
+    if(url != '') cloneRepo(url, targetFolder);
     let arr = [];
-    findjs(arr, StartPath);
+    findjs(arr, targetFolder);
     return arr;
 }
 

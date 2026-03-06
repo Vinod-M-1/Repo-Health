@@ -243,7 +243,7 @@ function summary(code){
             Halst: { Volume: 0 },
             rawMI: 0,
             MI: 0,
-            loc: 0,
+            loc: totalloc,
             ast: null,
             error: true, // Signal to the UI that this file failed
             errorMessage: err.message
