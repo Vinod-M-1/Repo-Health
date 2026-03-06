@@ -17,9 +17,12 @@ app.get('/analyse', async(req,res)=>{
     if (!repo_url) {
         return res.status(400).send("Please provide a repo URL");
     }   
-    const results = await main.runFullRepoAnalysis(repo_url);
-    res.json(results);
-
+    const { repoReport, repoanaly } = await main.runFullRepoAnalysis(repo_url);
+    res.render("analyse.ejs", {
+        repo: repo_url,
+        files: repoReport,
+        summary: repoanaly
+    });
 })
 
 app.listen(8080, () => {

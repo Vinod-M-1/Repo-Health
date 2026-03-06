@@ -1,14 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Repository Analysis</title>
+
+<style>
+
+:root{
+    --bg-color:#e8f7ff;
+    --card-color:#cfefff;
+    --input-bg:#f6fcff;
+    --accent:#5fd3ff;
+    --border:#000;
+}
+
+body{
+    margin:0;
+    padding:0;
+    height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:var(--bg-color);
+    font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    overflow:hidden;
+}
+
+.container{
+    background:var(--card-color);
+    padding:50px;
+
+    border-radius:12px;
+    border:3px solid var(--border);
+
+    box-shadow:8px 8px 0px 0px black;
+
+    max-width:650px;
+    width:90%;
+
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.subtitle{
+    color:#444;
+    margin-bottom:35px;
+}
+
+.form-group{
+    display:flex;
+    gap:15px;
+}
+
+input[type="text"]{
+    flex:1;
+
+    padding:16px 20px;
+    font-size:1rem;
+
+    border:3px solid black;
+    border-radius:8px;
+
+    background:var(--input-bg);
+    outline:none;
+}
+
+button{
+    padding:16px 30px;
+
+    font-size:1rem;
+    font-weight:bold;
+
+    background:var(--accent);
+
+    border:3px solid black;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    box-shadow:4px 4px 0px black;
+
+    transition:0.1s;
+}
+
+button:active{
+    transform:translate(2px,2px);
+    box-shadow:2px 2px 0px black;
+}
+
+
+/* Decorative Stars */
+
+.star{
+    position:absolute;
+    font-size:40px;
+    animation:float 6s ease-in-out infinite;
+}
+
+.star1{
+    top:80px;
+    left:120px;
+}
+
+.star2{
+    bottom:120px;
+    right:150px;
+}
+
+.star3{
+    top:140px;
+    right:250px;
+}
+
+.star4{
+    bottom:80px;
+    left:200px;
+}
+
+@keyframes float{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-15px);}
+    100%{transform:translateY(0px);}
+}
+
+</style>
 </head>
+
 <body>
-    <form action="/analyse" method="get">
-        <input type="text" name="url" placeholder="Enter repo url...">
-        <button>Submit</button>
-    </form>
+
+<div class="star star1">✨</div>
+<div class="star star2">⭐</div>
+<div class="star star3">✨</div>
+<div class="star star4">⭐</div>
+
+<div class="container">
+
+<h1>Repository Analysis</h1>
+
+<p class="subtitle">
+Analyze any GitHub repository complexity.
+</p>
+
+<form action="/analyse" method="get">
+
+<div class="form-group">
+
+<input
+type="text"
+name="url"
+placeholder="https://github.com/username/repo"
+required
+>
+
+<button type="submit">Analyze</button>
+
+</div>
+
+</form>
+
+</div>
+
 </body>
 </html>

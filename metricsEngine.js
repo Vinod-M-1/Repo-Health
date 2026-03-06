@@ -191,7 +191,14 @@ function calHalstead(code){
 
 // For a given file code to this gives its code analysis
 function summary(code){
-    const ast = acorn.parse(code,{ecmaVersion: "latest", locations: true})
+    try{
+        const ast = acorn.parse(code,{
+            ecmaVersion: "latest",
+            locations: true, 
+            sourceType:"module",
+            allowHashBang: true,
+            allowAwaitOutsideFunction: true
+        })
     
     const CC = calCyclomaticComplexity(ast);
     //example Cyclometric complexity object
@@ -228,6 +235,20 @@ function summary(code){
         ast: ast
     };
     return fileanalysis;
+    }catch(err){
+        console.error(`⚠️  Parsing skipped: ${err.message}`);
+        
+        return {
+            Cyclo: { totalScore: 0, funs: [] },
+            Halst: { Volume: 0 },
+            rawMI: 0,
+            MI: 0,
+            loc: 0,
+            ast: null,
+            error: true, // Signal to the UI that this file failed
+            errorMessage: err.message
+        };
+    }
     // console.log(fileanalysis);
     // console.log(`Total Volume (V): ${volume.Volume.toFixed(2)}`);
     // console.log(`Maintainability Score: ${normalizedMI.toFixed(2)}%`);
