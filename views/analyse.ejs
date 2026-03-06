@@ -165,7 +165,7 @@
     <div class="grid">
         <% files.forEach(file => { %>
             <div class="file-card">
-                <div class="file-header">📄 <%= file.file.split('/').pop() %></div>
+                <div class="file-header">📄 <%= file.file.replace(summary.uniqueFolderName + '/', '') %></div>
                 
                 <div class="stat-group">
                     <div class="stat-pill">LOC: <%= file.linesofcode %></div>
