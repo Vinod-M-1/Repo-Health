@@ -1,174 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repo Health Auditor</title>
+    <style>
+        :root {
+            --bg-color: #f0f0f0;
+            --card-color: #ffffff;
+            --accent: #bc95ff; /* Soft Purple */
+            --border: #000000;
+            --dot-color: #bbbbbb;
+        }
 
-<title>Repository Analysis</title>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Public Sans', 'Segoe UI', sans-serif;
+        }
 
-<style>
+        .container {
+            background: var(--card-color);
+            padding: 40px;
+            border: 3px solid var(--border);
+            box-shadow: 10px 10px 0px 0px var(--border);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
 
-:root{
-    --bg-color:#e8f7ff;
-    --card-color:#cfefff;
-    --input-bg:#f6fcff;
-    --accent:#5fd3ff;
-    --border:#000;
-}
+        h1 {
+            font-size: 3rem;
+            margin: 0 0 10px 0;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
 
-body{
-    margin:0;
-    padding:0;
-    height:100vh;
+        .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    background:var(--bg-color);
-    font-family:Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
-    overflow:hidden;
-}
+        input[type="text"] {
+            padding: 18px;
+            font-size: 1rem;
+            border: 3px solid var(--border);
+            background: #fff;
+            outline: none;
+        }
 
-.container{
-    background:var(--card-color);
-    padding:50px;
+        button {
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            background: var(--accent);
+            border: 3px solid var(--border);
+            cursor: pointer;
+            box-shadow: 5px 5px 0px var(--border);
+            transition: all 0.1s;
+            text-transform: uppercase;
+        }
 
-    border-radius:12px;
-    border:3px solid var(--border);
+        button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 3px 3px 0px var(--border);
+        }
 
-    box-shadow:8px 8px 0px 0px black;
+        .footer {
+            margin-top: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
 
-    max-width:650px;
-    width:90%;
-
-    text-align:center;
-    position:relative;
-    z-index:2;
-}
-
-h1{
-    font-size:3rem;
-    margin-bottom:15px;
-}
-
-.subtitle{
-    color:#444;
-    margin-bottom:35px;
-}
-
-.form-group{
-    display:flex;
-    gap:15px;
-}
-
-input[type="text"]{
-    flex:1;
-
-    padding:16px 20px;
-    font-size:1rem;
-
-    border:3px solid black;
-    border-radius:8px;
-
-    background:var(--input-bg);
-    outline:none;
-}
-
-button{
-    padding:16px 30px;
-
-    font-size:1rem;
-    font-weight:bold;
-
-    background:var(--accent);
-
-    border:3px solid black;
-    border-radius:8px;
-
-    cursor:pointer;
-
-    box-shadow:4px 4px 0px black;
-
-    transition:0.1s;
-}
-
-button:active{
-    transform:translate(2px,2px);
-    box-shadow:2px 2px 0px black;
-}
-
-
-/* Decorative Stars */
-
-.star{
-    position:absolute;
-    font-size:40px;
-    animation:float 6s ease-in-out infinite;
-}
-
-.star1{
-    top:80px;
-    left:120px;
-}
-
-.star2{
-    bottom:120px;
-    right:150px;
-}
-
-.star3{
-    top:140px;
-    right:250px;
-}
-
-.star4{
-    bottom:80px;
-    left:200px;
-}
-
-@keyframes float{
-    0%{transform:translateY(0px);}
-    50%{transform:translateY(-15px);}
-    100%{transform:translateY(0px);}
-}
-
-</style>
+        @media (min-width: 600px) {
+            .form-group { flex-direction: row; }
+            input[type="text"] { flex: 1; }
+        }
+    </style>
 </head>
-
 <body>
-
-<div class="star star1">✨</div>
-<div class="star star2">⭐</div>
-<div class="star star3">✨</div>
-<div class="star star4">⭐</div>
-
-<div class="container">
-
-<h1>Repository Analysis</h1>
-
-<p class="subtitle">
-Analyze any GitHub repository complexity.
-</p>
-
-<form action="/analyse" method="get">
-
-<div class="form-group">
-
-<input
-type="text"
-name="url"
-placeholder="https://github.com/username/repo"
-required
->
-
-<button type="submit">Analyze</button>
-
-</div>
-
-</form>
-
-</div>
-
+    <div class="container">
+        <h1>Repository Analysis</h1>
+        <p class="subtitle">Analyze any GitHub repository complexity and project health metrics: </p>
+        <form action="/analyse" method="get">
+            <div class="form-group">
+                <input type="text" name="url" placeholder="https://github.com/username/repo" required>
+                <button type="submit">Analyze →</button>
+            </div>
+        </form>
+    </div>
+    <div class="footer">Made by Vinod</div>
 </body>
 </html>
