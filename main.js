@@ -32,8 +32,6 @@ function CalFullRepoAnalysis(repo, targetPath){
         totalSmells += file.smells.length;
         sumMI += file.mi || 0;
     });
-
-    const targetPath = './temp_repo';
     
     const rawCommits = execSync(`git rev-list --count HEAD`, { cwd: targetPath });
     const commitCount = parseInt(rawCommits.toString().trim()) || 0;
