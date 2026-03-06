@@ -34,6 +34,7 @@ function getProjectFiles(url, targetFolder){
     if(url != '') cloneRepo(url, targetFolder);
     let arr = [];
     findjs(arr, targetFolder);
+    
     return arr;
 }
 
